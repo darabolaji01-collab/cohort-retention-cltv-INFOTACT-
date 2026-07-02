@@ -109,7 +109,7 @@ Python · Pandas · NumPy · Matplotlib · Seaborn · Jupyter Notebook · Git ·
 
 | Week | Focus | Status |
 |---|---|---|
-| Week 1 | Data cleaning & EDA | 🟡 In progress (Day 1 done: setup + profiling) |
+| Week 1 | Data cleaning & EDA | 🟡 In progress (Day 1: setup + profiling · Day 2: combined 3 files + cleaned → 392,687 rows) |
 | Week 2 | Cohort retention matrix | ⬜ Not started |
 | Week 3 | CLTV calculation | ⬜ Not started |
 | Week 4 | Visualization & insights | ⬜ Not started |
