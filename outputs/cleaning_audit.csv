@@ -1,0 +1,7 @@
+step,rows_remaining,rows_removed
+0. combined start,541909,
+1. drop duplicate rows,536641,5268.0
+2. remove cancelled invoices,527390,9251.0
+3. keep quantity > 0,526054,1336.0
+4. keep unit_price > 0,524878,1176.0
+5. require customer_id present,392692,132186.0
