@@ -2,126 +2,253 @@
 
 **Infotact Technical Internship — Data Analytics Project 2**
 
-> **Project in one sentence:** Group customers by the month they first purchased,
-> measure how many keep coming back over time, calculate how much they are worth
-> (Customer Lifetime Value), and recommend ways to reduce churn and improve profitability.
+This project studies customer retention and Customer Lifetime Value (CLTV) using the Online Retail transaction dataset. I grouped customers by the month they first purchased, measured how many returned in later months, then calculated simple historical CLTV and customer value segments.
 
 ---
 
-## 1. Business Problem
+## Business problem
 
-Acquiring a new customer can cost up to **5× more** than keeping an existing one.
-Many companies celebrate fast user growth but never check whether those users *stay*.
-If a business loses customers faster than it wins them, it will eventually collapse.
+Acquiring new customers is expensive, but a business only becomes healthy if customers keep coming back. This project answers two main questions:
 
-This project answers two questions with data:
+1. **Retention:** After a customer's first purchase, do they return in Month 1, Month 2, and later months?
+2. **CLTV:** How much revenue does an average customer generate, and which customer segments are most valuable?
 
-1. **Retention** — After a customer's first purchase, do they come back? *When* do they leave?
-2. **CLTV (Customer Lifetime Value)** — How much revenue is a customer worth over their lifetime,
-   and how does that differ between customer segments?
+The final goal is to help a product or finance team understand churn patterns and make better retention decisions.
 
-## 2. Who Uses This Analysis
+---
 
-| Persona | What they need | How they use this work |
-|---|---|---|
-| **Product Manager** | Understand user stickiness & drop-off | Reads the retention heatmap to find the month where churn is highest, then plans product fixes / re-engagement. |
-| **Finance Director** | Revenue forecasting & profitability | Uses CLTV to decide the maximum Customer Acquisition Cost (CAC) the business can afford while staying profitable. |
+## Dataset
 
-## 3. Dataset
+**Dataset:** Online Retail dataset (UCI Machine Learning Repository / Kaggle)
 
-**Source:** *Online Retail* dataset — real transactions from a UK-based online gift retailer,
-covering **01 Dec 2010 → 09 Dec 2011** (~13 months). Publicly available from the
-UCI Machine Learning Repository / Kaggle ("Online Retail").
+**Period covered:** 01 Dec 2010 to 09 Dec 2011
 
-> ⚠️ **Data is NOT stored in this repository.** Per Infotact rules, raw data files are
-> excluded via `.gitignore`. To run the analysis, place the data files inside a local
-> `data/` folder (see *How to Run* below).
+**Main columns used:**
 
-**Columns (raw):** `InvoiceNo`, `StockCode`, `Description`, `Quantity`, `InvoiceDate`,
-`UnitPrice`, `CustomerID`, `Country`.
+- `InvoiceNo`
+- `StockCode`
+- `Description`
+- `Quantity`
+- `InvoiceDate`
+- `UnitPrice`
+- `CustomerID`
+- `Country`
 
-**Key facts observed during initial profiling (Day 1):**
+> Raw data is **not stored in this repository**. The `data/` folder is ignored by git so that raw CSV/XLSX files are not uploaded.
 
-| Metric | Value |
-|---|---|
-| Total line-item rows | ~539,000 |
-| Date range | 2010-12-01 → 2011-12-09 (~13 months) |
-| Unique customers | ~4,370 |
-| Countries | 37+ |
-| Rows missing `CustomerID` | large share — must be handled in cleaning |
-| Cancellation invoices (InvoiceNo starts with `C`) | present — must be filtered |
-| Negative quantities (returns) | present — must be filtered |
-| Duplicate rows | present — must be removed |
+### How to get the data
 
-*(Exact numbers are recorded in `outputs/day1_data_profile.md`.)*
+Download the Online Retail dataset and place it here:
 
-## 4. Planned Deliverables
-
-- **Code:** Jupyter notebooks + `requirements.txt` + clean folder structure
-- **Analysis:** cleaned data process, cohort-month calculation, retention count matrix,
-  retention percentage heatmap, CLTV by segment
-- **Presentation:** this README, charts/screenshots, business insights & recommendations
-- **Process:** GitHub commit history spread across all 4 weeks (mandatory for evaluation)
-
-## 5. Repository Structure
-
+```text
+data/Online_Retail.xlsx
 ```
+
+The helper code also supports `data/Online_Retail.csv` if you use a CSV version.
+
+---
+
+## Folder structure
+
+```text
 .
-├── README.md              # This file — project overview
-├── .gitignore             # Keeps raw data & secrets out of GitHub
-├── requirements.txt       # Python packages needed
-├── data/                  # (LOCAL ONLY — ignored by git) put dataset files here
-├── notebooks/             # Jupyter notebooks for each analysis step
-├── src/                   # Reusable Python helper scripts
-├── outputs/               # Generated charts, tables, profile reports
-└── reports/               # Written summaries & business recommendations
+├── .github/workflows/             # GitHub Actions workflow
+├── data/                          # Local raw data only (ignored by git)
+├── notebooks/
+│   ├── 01_data_cleaning_eda.ipynb
+│   ├── 02_cohort_month_index.ipynb
+│   ├── 03_cohort_retention_matrix.ipynb
+│   ├── 04_cltv_analysis.ipynb
+│   └── 05_visualizations_insights.ipynb
+├── outputs/
+│   ├── cohort_retention_heatmap.png
+│   ├── retention_curves.png
+│   ├── cohort_cltv_bar_chart.png
+│   ├── segment_revenue_share.png
+│   ├── top_countries_revenue.png
+│   └── summary CSV/Markdown files
+├── reports/
+│   └── final_business_summary.md
+├── src/
+│   └── data_prep.py
+├── tests/
+│   └── test_data_prep.py
+├── .gitignore
+├── README.md
+└── requirements.txt
 ```
 
-## 6. Formulas Used (reference)
+---
 
-| Metric | Formula |
-|---|---|
-| Retention Rate | active users in later month ÷ original cohort size × 100 |
-| Churn Rate | 100% − Retention Rate |
-| Average Order Value (AOV) | Total Revenue ÷ Number of Orders |
-| Purchase Frequency | Number of Orders ÷ Number of Unique Customers |
-| Customer Value | AOV × Purchase Frequency |
-| Simple CLTV | AOV × Purchase Frequency × Customer Lifespan |
+## Technologies used
 
-## 7. How to Run (once data is added)
+- Python
+- Pandas
+- NumPy
+- Matplotlib
+- Seaborn
+- Jupyter Notebook
+- Pytest
+- Git and GitHub
+
+---
+
+## Setup instructions
+
+Create and activate a virtual environment:
 
 ```bash
-# 1. Install packages
+python -m venv .venv
+
+# Windows
+.venv\Scripts\activate
+
+# macOS / Linux
+source .venv/bin/activate
+```
+
+Install the required packages:
+
+```bash
 pip install -r requirements.txt
+```
 
-# 2. Put the dataset files inside a local  data/  folder
-#    (this folder is git-ignored and will NOT upload)
+Launch Jupyter Notebook:
 
-# 3. Launch Jupyter and open the notebooks in order
+```bash
 jupyter notebook
 ```
 
-## 8. Tools
+Run the notebooks in this order:
 
-Python · Pandas · NumPy · Matplotlib · Seaborn · Jupyter Notebook · Git · GitHub.
+1. `notebooks/01_data_cleaning_eda.ipynb`
+2. `notebooks/02_cohort_month_index.ipynb`
+3. `notebooks/03_cohort_retention_matrix.ipynb`
+4. `notebooks/04_cltv_analysis.ipynb`
+5. `notebooks/05_visualizations_insights.ipynb`
 
-## 9. Progress Log
+You can also run a quick code check with:
 
-| Week | Focus | Status |
-|---|---|---|
-| Week 1 | Data cleaning & EDA | 🟡 In progress (Day 1: setup · Day 2: combined + cleaned → 392,687 rows · Day 3: added cohort_month / cohort_index) |
-| Week 2 | Cohort retention matrix | ⬜ Not started |
-| Week 3 | CLTV calculation | ⬜ Not started |
-| Week 4 | Visualization & insights | ⬜ Not started |
-
-## 10. Assumptions & Limitations
-
-- The three uploaded dataset parts are **chronological slices** of one dataset
-  (Parts 1–2 = Dec 2010→Sep 2011 raw; Part 3 = Sep→Dec 2011, pre-cleaned) and will be
-  combined into one continuous timeline during Week 1.
-- Refunds, cancellations, missing customer IDs, and duplicate rows will be removed before
-  cohort analysis, following the project specification.
+```bash
+pytest
+```
 
 ---
 
-*Author: Data Analytics Intern — Infotact Program.*
+## Analysis workflow
+
+### Week 1 — Data cleaning and cohort setup
+
+- Loaded the transaction dataset.
+- Standardized column names.
+- Removed duplicate rows.
+- Removed cancellations/refunds.
+- Removed non-positive quantities and prices.
+- Removed rows without customer IDs for cohort analysis.
+- Added:
+  - `transaction_month`
+  - `cohort_month`
+  - `cohort_index`
+
+### Week 2 — Cohort retention matrix
+
+- Built a cohort count matrix.
+- Built a retention percentage matrix.
+- Validated that Month 0 retention is 100% for every cohort.
+- Saved the retention matrices to `outputs/`.
+
+### Week 3 — CLTV analysis
+
+- Calculated total revenue.
+- Calculated Average Order Value (AOV).
+- Calculated purchase frequency.
+- Calculated historical CLTV.
+- Segmented customers into low, medium, and high value groups.
+- Compared CLTV by country and cohort.
+
+### Week 4 — Visualizations and insights
+
+- Created cohort retention heatmap.
+- Created retention curves.
+- Created CLTV and customer segment charts.
+- Wrote final business recommendations.
+
+---
+
+## Key findings
+
+After cleaning, the analysis dataset contained:
+
+| Metric | Value |
+|---|---:|
+| Clean rows | 392,692 |
+| Unique customers | 4,338 |
+| Unique orders | 18,532 |
+| Countries | 37 |
+| Total revenue | £8,887,208.89 |
+
+Retention findings:
+
+| Metric | Value |
+|---|---:|
+| Average Month 1 retention | 20.6% |
+| Average Month 2 retention | 22.1% |
+| Main issue | Large drop after first purchase |
+
+CLTV findings:
+
+| Metric | Value |
+|---|---:|
+| Average Order Value | £479.56 |
+| Purchase Frequency | 4.27 orders per customer |
+| Historical CLTV | £2,048.69 per customer |
+
+Customer segment findings:
+
+| Segment | Customers | Revenue share | Historical CLTV |
+|---|---:|---:|---:|
+| High value | 868 | 74.7% | £7,646.66 |
+| Medium value | 1,301 | 17.5% | £1,196.03 |
+| Low value | 2,169 | 7.8% | £319.90 |
+
+---
+
+## Visualizations
+
+The final charts are saved in the `outputs/` folder:
+
+- `outputs/cohort_retention_heatmap.png`
+- `outputs/retention_curves.png`
+- `outputs/cohort_cltv_bar_chart.png`
+- `outputs/segment_revenue_share.png`
+- `outputs/top_countries_revenue.png`
+
+---
+
+## Business recommendations
+
+1. **Improve early retention.** Since Month 1 retention is low, the business should send a follow-up email, discount, or product recommendation within the first few weeks after the first purchase.
+2. **Protect high-value customers.** The top 20% of customers generate most of the revenue, so they should receive better retention attention.
+3. **Move medium-value customers upward.** Medium-value customers already buy more than low-value customers, so targeted offers may encourage them to repeat purchase.
+4. **Use CLTV for acquisition decisions.** The business should avoid spending more on customer acquisition than a segment is likely to return.
+5. **Track cohorts every month.** Retention should be monitored regularly, not only once.
+
+---
+
+## Future improvements
+
+- Add marketing channel data to compare retention by acquisition source.
+- Analyze product categories bought by high-value customers.
+- Build a simple predictive 12-month CLTV model when more data is available.
+- Create a dashboard in Power BI, Tableau, or Streamlit.
+
+---
+
+## Project status
+
+All required deliverables for **Project 2: SaaS / E-Commerce Cohort Retention & CLTV Analysis** have been completed:
+
+- Week 1 cleaning and cohort setup ✅
+- Week 2 retention matrix ✅
+- Week 3 CLTV analysis ✅
+- Week 4 visualizations and business insights ✅
