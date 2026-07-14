@@ -1,7 +1,5 @@
-# Copy of the project .gitignore notes.
-# The real ignore file is named .gitignore.
-
 # Raw/local data must not be uploaded.
+# Put the Online Retail file inside data/ only.
 data/
 
 # Large Excel/database files should not be committed.

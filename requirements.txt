@@ -1,9 +1,10 @@
 # Python packages needed to run this project.
-# Install everything at once with:  pip install -r requirements.txt
+# Install everything at once with: pip install -r requirements.txt
 pandas
 numpy
 matplotlib
 seaborn
 jupyter
 openpyxl
+pytest
 nbstripout
